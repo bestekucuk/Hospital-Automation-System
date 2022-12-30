@@ -1,214 +1,215 @@
 package View;
 
+import Helper.Helper;
+import Model.Admin;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class adminPage extends JFrame {
 
-	private JPanel contentPane;
-	private JTextField textFieldKurumadı;
-	private JTextField textFieldİl;
-	private JTextField textFieldİlçe;
-	private JTable kurumSilTable;
-	private JTable kurumGüncelleTable;
-	private JTextField adTextfield;
-	private JTextField ilTextfield;
-	private JTextField ilçeTextfield;
-	private JTextField adresTextfield;
-	private JTextField textFieldAdres;
+    private JPanel contentPane;
+    private JTextField textFieldKurumadi;
+    private JTextField textFieldil;
+    private JTextField textFieldİlce;
+    private JTable kurumSilTable;
+    private JTable kurumGuncelleTable;
+    private JTextField adTextfield;
+    private JTextField ilTextfield;
+    private JTextField ilceTextfield;
+    private JTextField adresTextfield;
+    private JTextField textFieldAdres;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					adminPage frame = new adminPage();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    adminPage frame = new adminPage();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-	/**
-	 * Create the frame.
-	 */
-	public adminPage() {
-		setResizable(false);
-		setTitle("admin İşlemleri");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
-		contentPane = new JPanel();
-		contentPane.setBackground(Color.LIGHT_GRAY);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+    /**
+     * Create the frame.
+     */
+    public adminPage() throws SQLException {
+        setResizable(false);
+        setTitle("admin İşlemleri");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 800, 600);
+        contentPane = new JPanel();
+        contentPane.setBackground(Color.LIGHT_GRAY);
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("admin İşlemleri");
-		lblNewLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(225, 6, 349, 90);
-		contentPane.add(lblNewLabel);
+        JLabel lblNewLabel = new JLabel("admin İşlemleri");
+        lblNewLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
+        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel.setBounds(225, 6, 349, 90);
+        contentPane.add(lblNewLabel);
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBackground(Color.WHITE);
-		tabbedPane.setBounds(6, 96, 788, 470);
-		contentPane.add(tabbedPane);
+        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        tabbedPane.setBackground(Color.WHITE);
+        tabbedPane.setBounds(6, 96, 788, 470);
+        contentPane.add(tabbedPane);
 
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Kurum Güncelle", null, panel_1, null);
-		panel_1.setLayout(null);
 
-		JButton kurumGüncelleButon = new JButton("Kurum güncelle");
-		kurumGüncelleButon.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-		kurumGüncelleButon.setBounds(456, 306, 230, 89);
-		panel_1.add(kurumGüncelleButon);
 
-		kurumGüncelleTable = new JTable();
-		kurumGüncelleTable.setBounds(6, 6, 338, 412);
-		panel_1.add(kurumGüncelleTable);
+        String[] hastaneTurleri = {"hastane","diş hastanesi","sağlık ocağı"};
 
-		JLabel kurumGüncelleAd = new JLabel("Adı:");
-		kurumGüncelleAd.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-		kurumGüncelleAd.setBounds(384, 16, 61, 16);
-		panel_1.add(kurumGüncelleAd);
+        JPanel panel = new JPanel();
+        tabbedPane.addTab("Kurum ekle", null, panel, null);
+        panel.setLayout(null);
 
-		adTextfield = new JTextField();
-		adTextfield.setBounds(384, 33, 198, 26);
-		panel_1.add(adTextfield);
-		adTextfield.setColumns(10);
+        JButton kurumEkleBbuton = new JButton("Kurum ekle");
+        kurumEkleBbuton.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+        kurumEkleBbuton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Admin a=new Admin();
+                String s;
+                s="hastane";
+                try {
+                    a.addSaglikKurumu(textFieldKurumadi.getText(),textFieldil.getText(),textFieldİlce.getText(),s);
 
-		JLabel kurumGüncelleİl = new JLabel("İl:");
-		kurumGüncelleİl.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-		kurumGüncelleİl.setBounds(384, 71, 61, 16);
-		panel_1.add(kurumGüncelleİl);
+                    Helper.showMsg("success");
 
-		ilTextfield = new JTextField();
-		ilTextfield.setColumns(10);
-		ilTextfield.setBounds(384, 88, 198, 26);
-		panel_1.add(ilTextfield);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        kurumEkleBbuton.setBounds(458, 279, 230, 89);
+        panel.add(kurumEkleBbuton);
 
-		JLabel kurumGüncelleİlçe = new JLabel("İlçe:");
-		kurumGüncelleİlçe.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-		kurumGüncelleİlçe.setBounds(384, 128, 61, 16);
-		panel_1.add(kurumGüncelleİlçe);
+        JLabel kurumadiLabel = new JLabel("Kurum Adı:");
+        kurumadiLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+        kurumadiLabel.setBounds(78, 25, 93, 34);
+        panel.add(kurumadiLabel);
 
-		ilçeTextfield = new JTextField();
-		ilçeTextfield.setColumns(10);
-		ilçeTextfield.setBounds(384, 145, 198, 26);
-		panel_1.add(ilçeTextfield);
+        textFieldKurumadi = new JTextField();
+        textFieldKurumadi.setColumns(10);
+        textFieldKurumadi.setBounds(78, 58, 262, 34);
+        panel.add(textFieldKurumadi);
 
-		JLabel kurumGüncelleAdres = new JLabel("Adres:");
-		kurumGüncelleAdres.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-		kurumGüncelleAdres.setBounds(384, 185, 61, 16);
-		panel_1.add(kurumGüncelleAdres);
+        JLabel ilLabel = new JLabel("İl:");
+        ilLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+        ilLabel.setBounds(78, 93, 93, 34);
+        panel.add(ilLabel);
 
-		adresTextfield = new JTextField();
-		adresTextfield.setColumns(10);
-		adresTextfield.setBounds(384, 202, 198, 26);
-		panel_1.add(adresTextfield);
+        textFieldil = new JTextField();
+        textFieldil.setColumns(10);
+        textFieldil.setBounds(78, 126, 262, 34);
+        panel.add(textFieldil);
 
-		JLabel kurumGüncelleKategori = new JLabel("Kategori:");
-		kurumGüncelleKategori.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-		kurumGüncelleKategori.setBounds(384, 238, 88, 27);
-		panel_1.add(kurumGüncelleKategori);
+        JLabel ilceLabel = new JLabel("İlçe:");
+        ilceLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+        ilceLabel.setBounds(78, 172, 93, 34);
+        panel.add(ilceLabel);
 
-		JComboBox kategoriComboBox = new JComboBox();
-		kategoriComboBox.setBounds(384, 266, 198, 27);
-		panel_1.add(kategoriComboBox);
+        JLabel hastaneLabel = new JLabel("Hastane türü:");
+        hastaneLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+        hastaneLabel.setBounds(78, 321, 183, 34);
+        panel.add(hastaneLabel);
 
-		String[] hastaneTurleri = {"hastane","diş hastanesi","sağlık ocağı"};
+        textFieldİlce = new JTextField();
+        textFieldİlce.setColumns(10);
+        textFieldİlce.setBounds(78, 205, 262, 34);
+        panel.add(textFieldİlce);
 
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("Kurum ekle", null, panel, null);
-		panel.setLayout(null);
+        JComboBox comboboxHastane = new JComboBox(hastaneTurleri);
+        comboboxHastane.setBounds(78, 354, 262, 27);
+        panel.add(comboboxHastane);
 
-		JButton kurumEkleBbuton = new JButton("Kurum ekle");
-		kurumEkleBbuton.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-		kurumEkleBbuton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		kurumEkleBbuton.setBounds(458, 279, 230, 89);
-		panel.add(kurumEkleBbuton);
+        JLabel adresLabel = new JLabel("Adres:");
+        adresLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+        adresLabel.setBounds(78, 251, 93, 34);
+        panel.add(adresLabel);
 
-		JLabel kurumadıLabel = new JLabel("Kurum Adı:");
-		kurumadıLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-		kurumadıLabel.setBounds(78, 25, 93, 34);
-		panel.add(kurumadıLabel);
+        textFieldAdres = new JTextField();
+        textFieldAdres.setColumns(10);
+        textFieldAdres.setBounds(78, 284, 262, 34);
+        panel.add(textFieldAdres);
 
-		textFieldKurumadı = new JTextField();
-		textFieldKurumadı.setColumns(10);
-		textFieldKurumadı.setBounds(78, 58, 262, 34);
-		panel.add(textFieldKurumadı);
+        //KURUM SILL
 
-		JLabel ilLabel = new JLabel("İl:");
-		ilLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-		ilLabel.setBounds(78, 93, 93, 34);
-		panel.add(ilLabel);
+        JPanel panel_2 = new JPanel();
+        tabbedPane.addTab("Kurum Sil", null, panel_2, null);
+        panel_2.setLayout(null);
 
-		textFieldİl = new JTextField();
-		textFieldİl.setColumns(10);
-		textFieldİl.setBounds(78, 126, 262, 34);
-		panel.add(textFieldİl);
 
-		JLabel ilçeLabel = new JLabel("İlçe:");
-		ilçeLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-		ilçeLabel.setBounds(78, 172, 93, 34);
-		panel.add(ilçeLabel);
 
-		JLabel hastaneLabel = new JLabel("Hastane türü:");
-		hastaneLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-		hastaneLabel.setBounds(78, 321, 183, 34);
-		panel.add(hastaneLabel);
+        //JButton tabloUpdate = new JButton("Tablo Güncelle");
+        //tabloUpdate .setBounds(460, 140, 230, 89);
+        //tabloUpdate .setFont(new Font("Lucida Grande", Font.BOLD, 16));
+        //panel_2.add(tabloUpdate );
 
-		textFieldİlçe = new JTextField();
-		textFieldİlçe.setColumns(10);
-		textFieldİlçe.setBounds(78, 205, 262, 34);
-		panel.add(textFieldİlçe);
 
-		JComboBox comboboxHastane = new JComboBox(hastaneTurleri);
-		comboboxHastane.setBounds(78, 354, 262, 27);
-		panel.add(comboboxHastane);
+        JButton kurumSilButon = new JButton("Kurum sil");
+        kurumSilButon.setBounds(460, 280, 230, 89);
+        kurumSilButon.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+        panel_2.add(kurumSilButon);
 
-		JLabel adresLabel = new JLabel("Adres:");
-		adresLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-		adresLabel.setBounds(78, 251, 93, 34);
-		panel.add(adresLabel);
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Ad");
+        model.addColumn("Soyad");
 
-		textFieldAdres = new JTextField();
-		textFieldAdres.setColumns(10);
-		textFieldAdres.setBounds(78, 284, 262, 34);
-		panel.add(textFieldAdres);
+        Admin r=new Admin();
+       // for (int i = 0; i < r.getList().size(); i++) {
+         //   model.addRow(new String[]{r.getList().get(i).getIsim(),r.getList().get(i).getIl(),r.getList().get(i).getIlce()});
+        //}
+        kurumSilTable = new JTable(model);
+        kurumSilTable.setBounds(6, 6, 399, 412);
+        panel_2.add(kurumSilTable);
 
-		JPanel panel_2 = new JPanel();
-		tabbedPane.addTab("Kurum Sil", null, panel_2, null);
-		panel_2.setLayout(null);
 
-		JButton kurumSilButon = new JButton("Kurum sil");
-		kurumSilButon.setBounds(460, 280, 230, 89);
-		kurumSilButon.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-		panel_2.add(kurumSilButon);
 
-		kurumSilTable = new JTable();
-		kurumSilTable.setBounds(6, 6, 399, 412);
-		panel_2.add(kurumSilTable);
+        //SATIR SİL
 
-		JButton güvenliCıkıs = new JButton("Güvenli Çıkış");
-		güvenliCıkıs.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame1 f1 = new frame1();
-				f1.setVisible(true);
-			}
-		});
-		güvenliCıkıs.setBounds(677, 6, 117, 29);
-		contentPane.add(güvenliCıkıs);
-	}
+        // JTable'a bir MouseListener ekleyelim
+        kurumSilTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Fare tıklandığında, tıklanan satırı silelim
+                int row = kurumSilTable.rowAtPoint(e.getPoint()); // Tıklanan satırı bulalım
+                kurumSilButon.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        model.removeRow(row); // Satırı silelim
+                        Helper.showMsg("success");
+
+                    }
+                });
+
+            }
+        });
+
+
+
+
+
+        JButton guvenliCikis = new JButton("Güvenli Çıkış");
+        guvenliCikis.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame1 f1 = new frame1();
+                f1.setVisible(true);
+            }
+        });
+        guvenliCikis.setBounds(677, 6, 117, 29);
+        contentPane.add(guvenliCikis);
+    }
 }

@@ -1,14 +1,18 @@
 package View;
 
+import Helper.Helper;
 import Helper.Item;
 import Model.Admin;
 import Model.Randevu;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 public class hastaPage extends JFrame {
@@ -150,14 +154,11 @@ public class hastaPage extends JFrame {
 				Object selectedItem = select_ilce.getSelectedItem();
 
 				if (selectedItem != null) {
-					try {
-						if(gelis2[0]) select_hastane.removeAllItems();
-						for (int i = 0; i < r.getList2(selectedItem.toString()).size(); i++){
-							select_hastane.addItem(new Item(r.getList2(selectedItem.toString()).get(i).getId(), r.getList2(selectedItem.toString()).get(i).getIsim()).toString()); }
-
-					} catch (SQLException ex) {
-						throw new RuntimeException(ex);
-					}
+					if(gelis2[0]) select_hastane.removeAllItems();
+					//for (int i = 0; i < r.getList2(selectedItem.toString()).size(); i++){
+					//select_hastane.addItem(new Item(r.getList2(selectedItem.toString()).get(i).getId(), r.getList2(selectedItem.toString()).get(i).getIsim()).toString()); }
+					select_hastane.addItem("Kızılyaka Devlet Hastanesi" +
+							"Araştırma Hastanesi");
 
 				}
 			}
@@ -209,10 +210,7 @@ public class hastaPage extends JFrame {
 			panel_1.setLayout(null);
 
 			JButton btnNewButton_1_1_1 = new JButton("Randevu sil");
-			btnNewButton_1_1_1.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
+
 			btnNewButton_1_1_1.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 			btnNewButton_1_1_1.setBounds(493, 285, 230, 89);
 			panel_1.add(btnNewButton_1_1_1);
@@ -220,42 +218,65 @@ public class hastaPage extends JFrame {
 			JPanel panel_2 = new JPanel();
 			panel_2.setBounds(18, 20, 419, 387);
 			panel_1.add(panel_2);
-
-
 			panel_2.setLayout(null);
+          //TABLO
+		    DefaultTableModel model = new DefaultTableModel();
+		       model.addColumn("Ad");
+		        model.addColumn("Soyad");
 
-			String[][] veri = {{"DOKTOR", "SAAT"}, {"dr.mehmet", "14.00"}, {"dr.ayşe", "12.00"}};
-			String[] başlık = {"DOKTOR", "SAAT"};
 
-			table = new JTable(veri, başlık);
+			table = new JTable(model);
 			table.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 			table.setBounds(6, 6, 391, 376);
 			panel_2.add(table);
+     //SATIR SİL
+
+		// JTable'a bir MouseListener ekleyelim
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// Fare tıklandığında, tıklanan satırı silelim
+				int row = table.rowAtPoint(e.getPoint()); // Tıklanan satırı bulalım
+				btnNewButton_1_1_1.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						model.removeRow(row); // Satırı silelim
+						Helper.showMsg("success");
+
+					}
+				});
+
+			}
+		});
 
 
-		//	JComboBox comboBox_1 = new JComboBox();
-		//	comboBox_1.setBounds(459, 172, 288, 88);
-		//	panel_1.add(comboBox_1);
 
 		//BUTON
 		JButton button_randevu = new JButton("Randevu Oluştur");
 		button_randevu.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		button_randevu.setBounds(458, 280, 230, 89);
 		panel.add(button_randevu);
-		//
+
 		button_randevu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					JOptionPane.showMessageDialog(null, "Basarıyla randevu olusturuldu", "Randevu", JOptionPane.INFORMATION_MESSAGE);
+					Object selectedItem= select_il.getSelectedItem();
+					Object selectedItem2= select_ilce.getSelectedItem();
+					Object selectedItem3= select_hastane.getSelectedItem();
+					Object selectedItem4= select_klinik.getSelectedItem();
+					Object selectedItem5= select_doktor.getSelectedItem();
+					Object selectedItem6= select_saat.getSelectedItem();
+                     r.addRandevu(selectedItem.toString(),selectedItem2.toString(),selectedItem3.toString(),selectedItem4.toString(),selectedItem5.toString(),selectedItem6.toString());
 					select_ilce.removeAllItems();
 					select_hastane.removeAllItems();
 					select_doktor.removeAllItems();
 
-
 				} catch (HeadlessException ex) {
 					throw new RuntimeException(ex);
 
+				} catch (SQLException ex) {
+					throw new RuntimeException(ex);
 				}
 			}
 		});
